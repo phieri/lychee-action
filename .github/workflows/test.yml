@@ -284,7 +284,7 @@ jobs:
       - name: Check exit code in steps.outputs
         run: |
           echo "Lychee exit code: ${{ steps.lychee_exit_code_test.outputs.exit_code }}"
-          if [[ "${{ steps.lychee_exit_code_test.outputs.exit_code }}" == "1" ]]; then
+          if [[ "${{ steps.lychee_exit_code_test.outputs.exit_code }}" = "1" ]]; then
             echo "Lychee correctly failed with exit code 1"
           else
             echo "Unexpected exit code: ${{ steps.lychee_exit_code_test.outputs.exit_code }}"

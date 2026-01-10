@@ -12,6 +12,5 @@ jobs:
       - uses: ahmadnassri/action-dependabot-auto-merge@v2.6.6
         with:
           github-token: ${{ secrets.AUTOMERGE_TOKEN }}
-          # Merge all updates as long as they pass CI.
-          # Includes minor and patch updates.
+          # Merge all updates (major, minor, and patch) as long as they pass CI
           update_type: "semver:major" 

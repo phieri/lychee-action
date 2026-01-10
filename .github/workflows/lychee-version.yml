@@ -79,8 +79,8 @@ jobs:
         uses: peter-evans/create-pull-request@v8
         with:
           branch: ${{ env.update_branch_name }}
-          title: "Update lycheeVersion to  ${{ env.release_version }}"
-          body: "This PR updates the lycheeVersion to the latest release version ${{ env.release_version }} ."
+          title: "Update lycheeVersion to ${{ env.release_version }}"
+          body: "This PR updates the lycheeVersion to the latest release version ${{ env.release_version }}."
           labels: "automated-pr"
           assignees: mre
           reviewers: Arteiii,thomas-zahner

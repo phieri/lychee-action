@@ -37,7 +37,7 @@ fi
 
 # If `--mode` occurs in args and `INPUT_CHECKBOX` is set, exit with an error 
 # Use `--mode` instead of `--mode task` to ensure that the checkbox is not getting overwritten
-if [[ "$ARGS" =~ "--mode " ]] && [ "${INPUT_CHECKBOX}" = "true" ]; then
+if [[ "$ARGS" =~ (^|[[:space:]])--mode($|[[:space:]]) ]] && [ "${INPUT_CHECKBOX}" = "true" ]; then
   echo "Error: '--mode' is set in args but 'checkbox' is set in the action configuration. Please remove one of them to avoid conflicts."
   exit 1
 fi

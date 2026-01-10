@@ -72,7 +72,8 @@ runs:
 
         ARCH=$(uname -m)
         # Determine filename and download URL based on version
-        if [[ "${LYCHEE_VERSION}" =~ ^v0\.0|^v0\.1[0-5]\. ]]; then
+        # Match versions v0.0 through v0.15 (old naming scheme)
+        if [[ "${LYCHEE_VERSION}" =~ ^v0\.(1?[0-5]|[6-9])\. ]]; then
           FILENAME="lychee-${LYCHEE_VERSION}-${ARCH}-unknown-linux-gnu.tar.gz"
           DOWNLOAD_URL="https://github.com/lycheeverse/lychee/releases/download/${LYCHEE_VERSION}/${FILENAME}"
         else

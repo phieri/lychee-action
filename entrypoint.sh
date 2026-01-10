@@ -65,23 +65,23 @@ LYCHEE_EXIT_CODE=$?
 should_fail_because_empty=false
 if [ "${INPUT_FAILIFEMPTY}" = "true" ]; then
     # This is a somewhat crude way to check the Markdown output of lychee
-    if grep -E 'Total\s+\|\s+0' "${LYCHEE_TMP}"; then
+    if grep -qE 'Total\s+\|\s+0' "${LYCHEE_TMP}"; then
         echo "No links were found. This usually indicates a configuration error." >> "${LYCHEE_TMP}"
-        echo "If this was expected, set 'failIfEmpty: false' in the args." >> "${LYCHEE_TMP}"
+        echo "If this was expected, set 'failIfEmpty: false' in the action configuration." >> "${LYCHEE_TMP}"
         should_fail_because_empty=true
     fi
 fi
 
 if [ ! -f "${LYCHEE_TMP}" ]; then
     echo "No output. Check pipeline run to see if lychee panicked." > "${LYCHEE_TMP}"
-else
-    # If we have any output, create a report in the designated directory
-    mkdir -p "$(dirname -- "${INPUT_OUTPUT}")"
-    cat "${LYCHEE_TMP}" > "${INPUT_OUTPUT}"
+fi
 
-    if [ "${INPUT_FORMAT}" = "markdown" ]; then
-        echo "[Full Github Actions output](${GITHUB_WORKFLOW_URL})" >> "${INPUT_OUTPUT}"
-    fi
+# If we have any output, create a report in the designated directory
+mkdir -p "$(dirname -- "${INPUT_OUTPUT}")"
+cat "${LYCHEE_TMP}" > "${INPUT_OUTPUT}"
+
+if [ "${INPUT_FORMAT}" = "markdown" ]; then
+    echo "[Full Github Actions output](${GITHUB_WORKFLOW_URL})" >> "${INPUT_OUTPUT}"
 fi
 
 # Output to console
@@ -100,10 +100,10 @@ echo "exit_code=$LYCHEE_EXIT_CODE" >> "$GITHUB_OUTPUT"
 # Determine the outcome of this step
 # Exiting with a nonzero value will fail the pipeline, but the specific value
 # does not matter. (GitHub does not share it with subsequent steps for composite actions.)
-if [ "$should_fail_because_empty" = true ] ; then
+if [ "$should_fail_because_empty" = true ]; then
   # If we decided previously to fail because no links were found, fail
   exit 1
-elif [ "$INPUT_FAIL" = true ] ; then
+elif [ "$INPUT_FAIL" = true ]; then
   # If `fail` is set to `true` (and it is by default), propagate lychee exit code
   exit ${LYCHEE_EXIT_CODE}
 fi

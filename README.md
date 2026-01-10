@@ -30,7 +30,7 @@ jobs:
     permissions:
       issues: write # required for peter-evans/create-issue-from-file
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - name: Link Checker
         id: lychee
@@ -40,7 +40,7 @@ jobs:
 
       - name: Create Issue From File
         if: steps.lychee.outputs.exit_code != 0
-        uses: peter-evans/create-issue-from-file@v5
+        uses: peter-evans/create-issue-from-file@v6
         with:
           title: Link Checker Report
           content-filepath: ./lychee/out.md
@@ -103,7 +103,7 @@ In order to mitigate issues regarding rate limiting or to reduce stress on exter
 
 ```yml
 - name: Restore lychee cache
-  uses: actions/cache@v4
+  uses: actions/cache@v5
   with:
     path: .lycheecache
     key: cache-lychee-${{ github.sha }}
@@ -124,7 +124,7 @@ If you need more control over when caches are restored and saved, you can split 
 ```yml
 - name: Restore lychee cache
   id: restore-cache
-  uses: actions/cache/restore@v4
+  uses: actions/cache/restore@v5
   with:
     path: .lycheecache
     key: cache-lychee-${{ github.sha }}
@@ -136,7 +136,7 @@ If you need more control over when caches are restored and saved, you can split 
     args: "--root-dir "$(pwd)" --cache --max-cache-age 1d ."
 
 - name: Save lychee cache
-  uses: actions/cache/save@v4
+  uses: actions/cache/save@v5
   if: always()
   with:
     path: .lycheecache

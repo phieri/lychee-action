@@ -87,13 +87,17 @@ runs:
         fi
 
         echo "Downloading from: ${DOWNLOAD_URL}"
-        curl -sfLO "${DOWNLOAD_URL}"
+        if ! curl -sfLO "${DOWNLOAD_URL}"; then
+          echo "Error: Failed to download lychee from ${DOWNLOAD_URL}"
+          echo "Please check if the version ${LYCHEE_VERSION} exists."
+          exit 1
+        fi
 
         echo "Extracting ${FILENAME}"
-        tar -xvzf "${FILENAME}"
+        tar -xzf "${FILENAME}"
 
         # Output temp directory for use in later steps
-        echo "temp_dir=${TEMP_DIR}" >> $GITHUB_OUTPUT
+        echo "temp_dir=${TEMP_DIR}" >> "$GITHUB_OUTPUT"
       env:
         LYCHEE_VERSION: ${{ inputs.lycheeVersion }}
       shell: bash
@@ -108,15 +112,15 @@ runs:
       run: ${{ github.action_path }}/entrypoint.sh
       env:
         # https://github.com/actions/runner/issues/665
-        INPUT_TOKEN: ${{ inputs.TOKEN }}
-        INPUT_ARGS: ${{ inputs.ARGS }}
-        INPUT_DEBUG: ${{ inputs.DEBUG }}
-        INPUT_FAIL: ${{ inputs.FAIL }}
-        INPUT_FAILIFEMPTY: ${{ inputs.FAILIFEMPTY }}
-        INPUT_FORMAT: ${{ inputs.FORMAT }}
-        INPUT_JOBSUMMARY: ${{ inputs.JOBSUMMARY }}
-        INPUT_CHECKBOX: ${{ inputs.CHECKBOX }}
-        INPUT_OUTPUT: ${{ inputs.OUTPUT }}
+        INPUT_TOKEN: ${{ inputs.token }}
+        INPUT_ARGS: ${{ inputs.args }}
+        INPUT_DEBUG: ${{ inputs.debug }}
+        INPUT_FAIL: ${{ inputs.fail }}
+        INPUT_FAILIFEMPTY: ${{ inputs.failIfEmpty }}
+        INPUT_FORMAT: ${{ inputs.format }}
+        INPUT_JOBSUMMARY: ${{ inputs.jobSummary }}
+        INPUT_CHECKBOX: ${{ inputs.checkbox }}
+        INPUT_OUTPUT: ${{ inputs.output }}
       shell: bash
 branding:
   icon: "external-link"

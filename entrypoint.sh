@@ -37,7 +37,7 @@ fi
 
 # If `--mode` occurs in args and `INPUT_CHECKBOX` is set, exit with an error 
 # Use `--mode` instead of `--mode task` to ensure that the checkbox is not getting overwritten
-if [[ "$ARGS" =~ "--mode" ]] && [ -n "${INPUT_CHECKBOX:-}" ]; then
+if [[ "$ARGS" =~ "--mode " ]] && [ "${INPUT_CHECKBOX}" = "true" ]; then
   echo "Error: '--mode' is set in args but 'checkbox' is set in the action configuration. Please remove one of them to avoid conflicts."
   exit 1
 fi
@@ -55,7 +55,9 @@ if [ "${INPUT_CHECKBOX}" = true ]; then
 fi
 
 # Execute lychee
-eval lychee ${CHECKBOX} ${FORMAT} --output ${LYCHEE_TMP} ${ARGS} 
+# We use eval to properly handle quoted arguments in ARGS
+# shellcheck disable=SC2086
+eval lychee ${CHECKBOX} ${FORMAT} --output "${LYCHEE_TMP}" ${ARGS} 
 LYCHEE_EXIT_CODE=$?
 
 # If no links were found and `failIfEmpty` is set to `true` (and it is by default),
@@ -77,7 +79,7 @@ else
     mkdir -p "$(dirname -- "${INPUT_OUTPUT}")"
     cat "${LYCHEE_TMP}" > "${INPUT_OUTPUT}"
 
-    if [ "${INPUT_FORMAT}" == "markdown" ]; then
+    if [ "${INPUT_FORMAT}" = "markdown" ]; then
         echo "[Full Github Actions output](${GITHUB_WORKFLOW_URL})" >> "${INPUT_OUTPUT}"
     fi
 fi
@@ -86,7 +88,7 @@ fi
 cat "${LYCHEE_TMP}"
 echo
 
-if [ "${INPUT_FORMAT}" == "markdown" ]; then
+if [ "${INPUT_FORMAT}" = "markdown" ]; then
   if [ "${INPUT_JOBSUMMARY}" = true ]; then
     cat "${LYCHEE_TMP}" > "${GITHUB_STEP_SUMMARY}"
   fi
